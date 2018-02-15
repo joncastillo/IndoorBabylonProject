@@ -1,0 +1,87 @@
+<root>
+<GPIO>
+    <gpio pin="4" direction="out" name="RELAY_1"/>
+    <gpio pin="5" direction="out" name="RELAY_2"/>
+    <gpio pin="6" direction="out" name="RELAY_3"/>
+    <gpio pin="14" direction="out" name="RELAY_4"/>
+    <gpio pin="15" direction="out" name="RELAY_5"/>
+    <gpio pin="16" direction="out" name="RELAY_6"/>
+    <gpio pin="17" direction="out" name="RELAY_7"/>
+    <gpio pin="20" direction="out" name="RELAY_8"/>
+    <gpio pin="21" direction="out" name="RELAY_9"/>
+    <gpio pin="22" direction="out" name="RELAY_10"/>
+    <gpio pin="23" direction="out" name="RELAY_11"/>
+    <gpio pin="24" direction="out" name="RELAY_12"/>
+    <gpio pin="25" direction="in" name="CONTACT_1"/>
+    <gpio pin="26" direction="in" name="CONTACT_2"/>
+    <gpio pin="27" direction="in" name="CONTACT_3"/>
+</GPIO>
+
+<PWM>
+    <pwm pin="12" name="PWM_1.1"/>
+    <pwm pin="18" name="PWM_1.2"/>
+    <pwm pin="13" name="PWM_2.1"/>
+    <pwm pin="19" name="PWM_2.2"/>
+</PWM>
+
+<I2C>
+    <i2c pin="2" name="SDA1"/>
+    <i2c pin="3" name="SCL1"/>
+</I2C>
+
+<SPI>
+    <spi pin="7" name="CE1"/>
+    <spi pin="8" name="CE0"/>
+    <spi pin="9" name="MISO"/>
+    <spi pin="10" name="MOSI"/>
+    <spi pin="11" name="CLK"/>
+</SPI>
+
+<ALIAS>
+    <alias name="RELAY_1">
+        <name>WATER_PUMP</name>
+    </alias>
+    <alias name="RELAY_2">
+        <name>GROWLIGHT_BOTTOM</name>
+    </alias>
+    <alias name="RELAY_3">
+        <name>GROWLIGHT_MIDDLE</name>
+    </alias>
+    <alias name="RELAY_4">
+        <name>GROWLIGHT_TOP</name>
+    </alias>
+    <alias name="RELAY_5">
+        <name>NOT_ASSIGNED</name>
+    </alias>
+    <alias name="RELAY_6">
+        LED_LIGHTING
+    </alias>
+    <alias name="RELAY_7">
+        NOT_ASSIGNED
+    </alias>
+    <alias name="RELAY_8">
+        VENTILATION_FAN
+    </alias>
+    <alias name="RELAY_9">
+        MIST_BOTTOM
+    </alias>
+    <alias name="RELAY_10">
+        MIST_MIDDLE
+    </alias>
+    <alias name="RELAY_11">
+        MIST_TOP
+    </alias>
+    <alias name="RELAY_12">
+        MIST_OVERHEAD
+    </alias>
+    <alias name="CONTACT_1">
+        MOTION_SENSOR
+    </alias>
+    <alias name="CONTACT_2">
+        NOT_ASSIGNED
+    </alias>
+    <alias name="CONTACT_3">
+        NOT_ASSIGNED
+    </alias>
+</ALIAS>
+</root>
