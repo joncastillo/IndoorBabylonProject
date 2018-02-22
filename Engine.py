@@ -4,6 +4,10 @@ import importlib
 import sqlite3
 import pigpio
 
+import Switch
+import Contact
+import PWM
+
 class Engine(object):
     e_messageType = Enum('messageType', 'eOnSwitchChange eOnPwmChange eOnContactChange')
 

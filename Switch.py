@@ -17,7 +17,6 @@ class Switch(Gpio):
         pi = pigpio.pi()
         pi.set_mode(self.getGpio(), pigpio.OUTPUT)
 
-    #@classmethod
     def setState(self, state):
         pi = pigpio.pi()
         if state != self.state:
@@ -33,10 +32,8 @@ class Switch(Gpio):
             raise TypeError("notificationBehavior must be derived from NotifyBehavior.")
         self.notificationBehavior = notificationBehavior
 
-    #@classmethod
     def getState(self):
         return self.state
 
-    #@classmethod
     def __repr__(self):
         return "GPIO"+str(self.gpioNumber)+"[SW]:"+str(self.state)

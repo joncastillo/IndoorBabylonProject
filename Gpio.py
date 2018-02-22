@@ -7,12 +7,10 @@ class Gpio(Pin):
         super().__init__(pinNumber, label)
         self.setGpio(gpioNumber)
 
-    #@classmethod
     def setGpio(self, gpioNumber):
         if not isinstance(gpioNumber, int):
             raise TypeError("gpioNumber must be an Integer.")
         self.gpioNumber = gpioNumber
 
-    #@classmethod
     def getGpio(self):
         return self.gpioNumber
