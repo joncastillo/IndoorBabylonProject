@@ -40,6 +40,7 @@
 <ALIAS>
     <alias name="RELAY_1">
         <name>WATER_PUMP</name>
+        <name>PRIME_THE_PUMP</name>
     </alias>
     <alias name="RELAY_2">
         <name>GROWLIGHT_BOTTOM</name>
@@ -54,34 +55,34 @@
         <name>NOT_ASSIGNED</name>
     </alias>
     <alias name="RELAY_6">
-        LED_LIGHTING
+        <name>LED_LIGHTING</name>
     </alias>
     <alias name="RELAY_7">
-        NOT_ASSIGNED
+        <name>NOT_ASSIGNED</name>
     </alias>
     <alias name="RELAY_8">
-        VENTILATION_FAN
+        <name>VENTILATION_FAN</name>
     </alias>
     <alias name="RELAY_9">
-        MIST_BOTTOM
+        <name>MIST_BOTTOM</name>
     </alias>
     <alias name="RELAY_10">
-        MIST_MIDDLE
+        <name>MIST_MIDDLE</name>
     </alias>
     <alias name="RELAY_11">
-        MIST_TOP
+        <name>MIST_TOP</name>
     </alias>
     <alias name="RELAY_12">
-        MIST_OVERHEAD
+        <name>MIST_OVERHEAD</name>
     </alias>
     <alias name="CONTACT_1">
-        MOTION_SENSOR
+        <name>MOTION_SENSOR</name>
     </alias>
     <alias name="CONTACT_2">
-        NOT_ASSIGNED
+        <name>NOT_ASSIGNED</name>
     </alias>
     <alias name="CONTACT_3">
-        NOT_ASSIGNED
+        <name>NOT_ASSIGNED</name>
     </alias>
 </ALIAS>
 </root>

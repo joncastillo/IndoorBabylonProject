@@ -1,0 +1,11 @@
+<RULES>
+    <ONCHANGERULES>
+        <OnChange gpio="" condition="" rulefile="lighting"/>
+        <OnChange gpio="" toValue="" condition="" rulefile="ledlighting"/>
+    </ONCHANGERULES>
+
+    <CRONRULES>
+        <CronRule cron="0 0 10 30" condition="" rulefile="water"/>
+    </CRONRULES>
+
+</RULES>
