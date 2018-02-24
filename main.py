@@ -2,7 +2,7 @@ from Engine import Engine
 from reinitdb import rebuildDb
 from os import system
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 from flask_wtf import FlaskForm
@@ -41,6 +41,25 @@ def on_light():
 def off_light():
     engine.gpioList[2].setState(Switch.e_state.Off)
     return render_template('index.html', form=NameForm(), name=None)
+
+@app.route('/setgpio')
+def set_gpio():
+    gpioNum = request.args.get('gpioNum')
+    value = request.args.get('value')
+    for gpio in engine.gpioList:
+        if gpio.getGpio() == int(gpioNum):
+            gpio.setState(value)
+    return render_template('index.html', form=NameForm(), name=None)
+
+@app.route('/setpwm')
+def set_pwm():
+    gpioNum = int(request.args.get('gpioNum'))
+    value = int(request.args.get('value'))
+    for gpio in engine.gpioList:
+        if gpio.getGpio() == gpioNum:
+            gpio.setDutyCycle(value)
+    return render_template('index.html', form=NameForm(), name=None)
+
 
 
 @app.route('/', methods=['GET', 'POST'])

@@ -15,13 +15,13 @@ class PWM(Gpio):
 
 
     def setDutyCycle(self, dutyCycle):
-        pi = pigpio.pi()
         if not isinstance(dutyCycle, int):
             raise TypeError("duty cycle must be an Integer.")
         if dutyCycle < 0 or dutyCycle > 100:
             raise TypeError("duty cycle must be between 0 and 100%.")
         self.dutyCycle = dutyCycle
-        pi.set_PWM_dutycycle(self.getGpio(), dutyCycle)
+        setting = int((1 - (float(dutyCycle) / 100)) * 255)
+        self.engine.pi.set_PWM_dutycycle(self.getGpio(), setting)
 
     def setFrequency(self, frequency):
         pi = pigpio.pi()

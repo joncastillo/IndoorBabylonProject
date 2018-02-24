@@ -20,7 +20,7 @@ class Switch(Gpio):
         if state != self.state:
 
             self.state = state
-            if state == Switch.e_state.Off:
+            if state == Switch.e_state.Off or state == Switch.e_state.Off.name:
                 self.engine.pi.write(self.gpioNumber, 0)
             else:
                 self.engine.pi.write(self.gpioNumber, 1)
