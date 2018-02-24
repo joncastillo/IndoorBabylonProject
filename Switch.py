@@ -9,28 +9,21 @@ class Switch(Gpio):
 
     e_state = Enum('state', 'Off On')
 
-    def __init__(self, pinNumber, gpioNumber, label):
-        super().__init__(pinNumber,gpioNumber, label)
-        self.setState(Switch.e_state.Off)
+    def __init__(self, pinNumber, gpioNumber, label, engine):
+        super().__init__(pinNumber,gpioNumber, label, engine)
+        self.state = Switch.e_state.Off
 
         #initialise pin as output
-        pi = pigpio.pi()
-        pi.set_mode(self.getGpio(), pigpio.OUTPUT)
+        self.engine.pi.set_mode(gpioNumber, pigpio.OUTPUT)
 
     def setState(self, state):
         pi = pigpio.pi()
         if state != self.state:
-            self.state = state
-            pi.write(self.gpioNumber, state)
+            self.setState(state)
+            pi.write(self.gpioNumber, self.state)
             # implement on change method here
-            message = self.engine.OnSwitchChangeMessage(self.gpioNumber, state)
-
+            message = self.engine.OnSwitchChangeMessage(self.gpioNumber, self.state)
             self.engine.postMessage()
-
-    def setNotificationBehavior(self, notificationBehavior):
-        if not isinstance(notificationBehavior, NotifyBehavior):
-            raise TypeError("notificationBehavior must be derived from NotifyBehavior.")
-        self.notificationBehavior = notificationBehavior
 
     def getState(self):
         return self.state

@@ -6,13 +6,12 @@ from Gpio import Gpio
 class PWM(Gpio):
     """Represents a PWM output pin"""
 
-    def __init__(self, pinNumber, gpioNumber, label):
-        super().__init__(pinNumber, gpioNumber, label)
-        self.setDutyCycle(0)
-        self.setFrequency(100)
+    def __init__(self, pinNumber, gpioNumber, label, engine):
+        super().__init__(pinNumber, gpioNumber, label, engine)
+        self.dutyCycle = 0
+        self.frequency = 100
         #initialise pin as hardware pwm
-        pi = pigpio.pi()
-        pi.hardware_PWM(self.getGpio(), self.getFrequency(), self.getDutyCycle())
+        self.engine.pi.hardware_PWM(self.getGpio(), self.getFrequency(), self.getDutyCycle())
 
 
     def setDutyCycle(self, dutyCycle):
@@ -25,13 +24,14 @@ class PWM(Gpio):
         pi.set_PWM_dutycycle(self.getGpio(), dutyCycle)
 
     def setFrequency(self, frequency):
+        pi = pigpio.pi()
         if not isinstance(frequency, int):
             raise TypeError("frequency must be an Integer.")
         self.frequency = frequency
-        set_PWM_frequency(self.getGpio(), frequency)
+        pi.set_PWM_frequency(self.getGpio(), frequency)
 
     def getDutyCycle(self):
-        return self.dutycycle
+        return self.dutyCycle
 
     def getFrequency(self):
         return self.frequency

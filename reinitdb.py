@@ -10,6 +10,7 @@ def rebuildDb():
     db.execute("""DROP TABLE IF EXISTS Gpio""")
     db.execute("""DROP TABLE IF EXISTS Alias""")
     db.execute("""DROP TABLE IF EXISTS GpioSorted""")
+    db.execute("""DROP TABLE IF EXISTS Rules""")
 
     db.execute("""
       CREATE TABLE IF NOT EXISTS Gpio (
@@ -24,6 +25,22 @@ def rebuildDb():
         ID INTEGER PRIMARY KEY AUTOINCREMENT,
         alias TEXT NOT NULL UNIQUE,
         GpioID INTEGER NOT NULL,
+        FOREIGN KEY(GpioID) REFERENCES Gpio(ID)
+      )""")
+
+    db.execute("""
+      CREATE TABLE IF NOT EXISTS CronJobs (
+        ID INTEGER PRIMARY KEY AUTOINCREMENT,
+        cronStatement TEXT NOT NULL UNIQUE,
+        triggeredScript TEXT NOT NULL
+      )""")
+
+    db.execute("""
+      CREATE TABLE IF NOT EXISTS Rules (
+        ID INTEGER PRIMARY KEY AUTOINCREMENT,
+        GpioID INTEGER NOT NULL,
+        newValue INTEGER NOT NULL,
+        triggeredScript TEXT NOT NULL, 
         FOREIGN KEY(GpioID) REFERENCES Gpio(ID)
       )""")
 
@@ -107,3 +124,12 @@ def rebuildDb():
     print (table.fetchall())
     table = db.execute(""" SELECT * FROM Alias """)
     print (table.fetchall())
+
+    tree = etree.parse("./rules.xml")
+    for item in tree.iterfind("ONCHANGERULES"):
+        for item2 in item:
+            print(item2)
+
+    for item in tree.iterfind("CRONRULES"):
+        for item2 in item:
+            print(item2)

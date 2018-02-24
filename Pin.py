@@ -1,8 +1,9 @@
 class Pin(object):
     """Representation of a Raspberry Pi pin"""
-    def __init__(self, pinNumber, label):
+    def __init__(self, pinNumber, label, engine):
         self.setPinNumber(pinNumber)
         self.setLabel(label)
+        self.engine = engine
 
     def setPinNumber(self, pinNumber):
         if not isinstance(pinNumber, int):

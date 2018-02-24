@@ -1,20 +1,23 @@
-from abc import ABCMeta
+import abc
+from enum import Enum
+
 import threading
 import importlib
 import sqlite3
 import pigpio
 
-import Switch
-import Contact
-import PWM
+from Switch import Switch
+from Contact import Contact
+from PWM import PWM
 
-class Engine(object):
+class Engine(threading.Thread):
     e_messageType = Enum('messageType', 'eOnSwitchChange eOnPwmChange eOnContactChange')
 
-    class Message(object):
-        __metaclass__ = ABCMeta
 
-        @abstractmethod
+    class Message(object):
+        __metaclass__ = abc.ABCMeta
+
+        @abc.abstractmethod
         def __init__(self):
             self.messageType = None
 
@@ -22,34 +25,37 @@ class Engine(object):
         def __init__(self,gpuNumber, value):
             self.gpuNumber = gpuNumber
             self.value = value
-            self.messageType = Engine.OnSwitchChangeMessage
+            self.messageType = Engine.e_messageType.eOnSwitchChangeMessage
 
     class OnPwmChangeMessage(Message):
         def __init__(self,gpuNumber, value):
             self.gpuNumber = gpuNumber
             self.value = value
-            self.messageType = Engine.eOnPwmChange
+            self.messageType = Engine.e_messageType.eOnPwmChange
 
     class OnContactChangeMessage(Message):
         def __init__(self,gpuNumber, value):
             self.gpuNumber = gpuNumber
             self.value = value
-            self.messageType = Engine.eOnContactChange
-
-
-    cv = threading.Condition()
+            self.messageType = Engine.e_messageType.eOnContactChange
 
     def __init__(self):
+        super().__init__()
         self.messageQueue = []
         self.ruleTable = {}
         self.gpioList = []
         self.gpioLabelMapping = {}
+        self.ruleTableCronType = {}
+        self.ruleTableSwitchType = {}
+        self.ruleTablePWMType= {}
+        self.cv = threading.Condition()
+        self.pi = pigpio.pi()
 
+        self.initialiseLists()
 
     def initialiseLists(self):
         db = sqlite3.connect("./test2.sql")
         gpio = db.execute(""" SELECT * FROM Gpio """)
-        pi = pigpio.pi()
 
         for row in gpio:
             gpioType = row[2]
@@ -59,27 +65,31 @@ class Engine(object):
 
             if gpioType == 'out':
                 # create a switch
-                switch = Switch(pinNumber, gpioNumber, label)
+                switch = Switch(pinNumber, gpioNumber, label, self)
                 self.gpioList.append(switch)
                 self.gpioLabelMapping[label] = gpioNumber
 
             elif gpioType == 'in':
                 # create a contact
-                contact = Contact(pinNumber, gpioNumber, label)
+                contact = Contact(pinNumber, gpioNumber, label, self)
                 self.gpioList.append(contact)
                 self.gpioLabelMapping[label] = gpioNumber
 
             elif gpioType == 'PWM':
                 # create a pwm
-                pwm = PWM(pinNumber, gpioNumber, label)
+                pwm = PWM(pinNumber, gpioNumber, label, self)
                 self.gpioList.append(pwm)
                 self.gpioLabelMapping[label] = gpioNumber
 
             else:
                 print("Skipped pin for now")
 
+        for gpio in self.gpioList:
+            if gpio.threadBehavior != None:
+                gpio.threadBehavior.start()
+
         table = db.execute(""" SELECT * FROM Alias""")
-        gpioAliasMapping = {}
+        self.gpioAliasMapping = {}
         for row in table:
             alias = row[1]
             gpio = row[2]
@@ -89,20 +99,34 @@ class Engine(object):
         print(self.gpioList)
         print(self.gpioAliasMapping)
 
-        db = sqlite3.connect("./rules.sql")
-        gpio = db.execute(""" SELECT * FROM Rules """)
+        db = sqlite3.connect("./test2.sql")
 
+        rules = db.execute(""" SELECT * FROM Rules """)
 
-        for row in gpio:
-            gpioType = row[2]
-            pinNumber = row[0]
-            gpioNumber = row[1]
-            label = row[3]
+        for row in rules:
+            ruleType = row[0]
+            ruleTrigger = row[1]
+            ruleCondition = row[2]
+            ruleScript = row[3]
 
+            if ruleType == Engine.eOnSwitchChangeMessage:
+                if self.ruleTableSwitchType[ruleTrigger] == None:
+                    self.ruleTableSwitchType[ruleTrigger] = []
+                self.ruleTableSwitchType[ruleTrigger].append({ruleCondition, ruleScript})
+
+            elif ruleType == Engine.eOnPwmChange:
+                if self.ruleTablePWMType[ruleTrigger] == None:
+                    self.ruleTablePWMType[ruleTrigger] = []
+                self.ruleTablePWMType[ruleTrigger].append({ruleCondition, ruleScript})
+
+            elif ruleType == Engine.eOnContactChange:
+                if self.ruleTableContactType[ruleTrigger] == None:
+                    self.ruleTableContactType[ruleTrigger] = []
+                self.ruleTableContactType[ruleTrigger].append({ruleCondition, ruleScript})
 
 
     def processMessage(self, message):
-        if not isinstance(message, engineMessage):
+        if not isinstance(message, Engine.Message):
             raise TypeError("unrecognized message format.")
 
         if message.type == StateChange:
@@ -118,20 +142,20 @@ class Engine(object):
 
     def run(self):
         while (1):
-            cv.acquire()
+            self.cv.acquire()
 
-            if len(messageQueue) == 0:
-                cv.wait()
+            if len(self.messageQueue) == 0:
+                self.cv.wait()
 
-            message = messageQueue[0]
-            del messageQueue[0]
+            message = self.messageQueue[0]
+            del self.messageQueue[0]
 
-            cv.release()
+            self.cv.release()
             self.processMessage(message)
 
     def postMessage(self, message):
         # Produce one item
-        cv.acquire()
+        self.cv.acquire()
         self.messageQueue.append(message)
-        cv.notify()
-        cv.release()
+        self.cv.notify()
+        self.cv.release()

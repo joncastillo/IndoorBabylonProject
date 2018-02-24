@@ -10,17 +10,21 @@ class Contact(Gpio):
     """Represents an ordinary GPIO input pin"""
 
     e_state = Enum('state', 'High Low')
-    threadBehavior = None
 
-    def __init__(self, pinNumber, gpioNumber, label):
-        super().__init__(pinNumber,gpioNumber, label)
-        self.setPersistence(0)
-        self.threadBehavior = ThreadBehavior.ContactThreadBehaviorPersistent
-
+    def __init__(self, pinNumber, gpioNumber, label, engine):
+        super().__init__(pinNumber,gpioNumber, label, engine)
+        self.persistence = 0
+        # check every 1000 milli seconds (1s)
+        self.threadBehavior = ThreadBehavior.ContactThreadBehaviorPersistent(gpioNumber,self.engine,1000)
+        self.state = Contact.e_state.Low
         #initialise pin as input
-        pi = pigpio.pi()
-        pi.set_mode(self.getGpio(), pigpio.INPUT)ß
+        self.engine.pi.set_mode(gpioNumber, pigpio.INPUT)
 
+    def setPersistence(self, persistence):
+        self.persistence = persistence
+
+    def getPersistence(self):
+        return self.persistence
 
     def getState(self):
         return self.state

@@ -1,18 +1,20 @@
-from abc import ABCMeta
+import abc
 import pigpio
 import time
+import threading
 
-class GPIOThreadBehavior(object):
-    __metaclass__ = ABCMeta
+class GPIOThreadBehavior(threading.Thread):
+    __metaclass__ = abc.ABCMeta
 
     def __init__(self, gpioNumber, engine):
+        super().__init__()
         pi = pigpio.pi()
         self.gpioNumber = gpioNumber
         self.engine = engine
         self.quit = False
         self.old_status = pi.read(self.gpioNumber)
 
-    @abstractmethod
+    @abc.abstractmethod
     def run(self):
         pass
 
@@ -25,12 +27,13 @@ class ContactThreadBehaviorPersistent(GPIOThreadBehavior):
         pi = pigpio.pi()
         while self.quit == False:
             new_status = pi.read(self.gpioNumber)
-            if new_status != old_status:
-                old_status = new_status
-                m = self.engine.engineMessageGPIOStateChange(GPIO,new_status)
+            print("ContactThreadBehaviorPersistent of GPIO" + str(self.gpioNumber) + " status: "+ str(new_status))
+            if new_status != self.old_status:
+                self.old_status = new_status
+                m = self.engine.OnContactChangeMessage(self.gpioNumber,new_status)
                 self.engine.postMessage(m)
 
-            time.sleep(self.persistenceRate)
+            time.sleep(self.persistenceRate / 1000)
 
     def stop(self):
         self.quit = True
