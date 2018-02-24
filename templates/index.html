@@ -1,11 +1,14 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
 
-{% block title %}Flasky{% endblock %}
+{% block title %}Farm@Home{% endblock %}
 
 {% block page_content %}
 <div class="page-header">
-    <h1>Hello, {% if name %}{{ name }}{% else %}Stranger{% endif %}!</h1>
+    <a href = "http://localhost:5000/off"> Turn off GPIO 6 </a><br/>
+    <a href = "http://localhost:5000/on"> Turn on GPIO 6 </a>
 </div>
-{{ wtf.quick_form(form) }}
+<!--
+    {{ wtf.quick_form(form) }}
+-->
 {% endblock %}

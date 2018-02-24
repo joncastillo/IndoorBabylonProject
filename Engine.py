@@ -23,19 +23,19 @@ class Engine(threading.Thread):
 
     class OnSwitchChangeMessage(Message):
         def __init__(self,gpuNumber, value):
-            self.gpuNumber = gpuNumber
+            self.gpioNumber = gpuNumber
             self.value = value
-            self.messageType = Engine.e_messageType.eOnSwitchChangeMessage
+            self.messageType = Engine.e_messageType.eOnSwitchChange
 
     class OnPwmChangeMessage(Message):
         def __init__(self,gpuNumber, value):
-            self.gpuNumber = gpuNumber
+            self.gpioNumber = gpuNumber
             self.value = value
             self.messageType = Engine.e_messageType.eOnPwmChange
 
     class OnContactChangeMessage(Message):
         def __init__(self,gpuNumber, value):
-            self.gpuNumber = gpuNumber
+            self.gpioNumber = gpuNumber
             self.value = value
             self.messageType = Engine.e_messageType.eOnContactChange
 
@@ -129,13 +129,13 @@ class Engine(threading.Thread):
         if not isinstance(message, Engine.Message):
             raise TypeError("unrecognized message format.")
 
-        if message.type == StateChange:
+        if message.messageType == Engine.e_messageType.eOnSwitchChange or message.messageType == Engine.e_messageType.eOnContactChange:
             # todo: search if rules has an onChange event for this gpio
             # todo: execute corresponding triggered rule.
-            gpio = message.gpio
+            gpio = message.gpioNumber
 
-            if self.ruleTable[gpio] != None:
-                rule = ruleTable[gpio]
+            if self.ruleTable[gpio] is not None:
+                rule = self.ruleTable[gpio]
                 #todo dynamically import rule files and run their exec
                 rule_module = importlib.import_module('rules/'+str(rule))
                 rule_module.runRule()

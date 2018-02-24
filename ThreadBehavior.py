@@ -27,8 +27,8 @@ class ContactThreadBehaviorPersistent(GPIOThreadBehavior):
         pi = pigpio.pi()
         while self.quit == False:
             new_status = pi.read(self.gpioNumber)
-            print("ContactThreadBehaviorPersistent of GPIO" + str(self.gpioNumber) + " status: "+ str(new_status))
             if new_status != self.old_status:
+                print("Contact[" + str(self.gpioNumber) + "] changed to: " + str(new_status))
                 self.old_status = new_status
                 m = self.engine.OnContactChangeMessage(self.gpioNumber,new_status)
                 self.engine.postMessage(m)
