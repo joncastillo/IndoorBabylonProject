@@ -9,14 +9,17 @@ from ThreadBehavior import ContactThreadBehaviorPersistent
 class Contact(Gpio):
     """Represents an ordinary GPIO input pin"""
 
-    e_state = Enum('state', 'High Low')
+    e_state = Enum('state', 'Low High')
 
     def __init__(self, pinNumber, gpioNumber, label, engine):
         super().__init__(pinNumber,gpioNumber, label, engine)
         self.persistence = 0
         # check every 1000 milli seconds (1s)
         self.threadBehavior = ThreadBehavior.ContactThreadBehaviorPersistent(gpioNumber,self.engine,1000)
-        self.state = Contact.e_state.Low
+
+        currentState = self.engine.pi.read(gpioNumber)
+        self.state = Contact.e_state.Low if currentState == 0 else Contact.e_state.High
+
         #initialise pin as input
         self.engine.pi.set_mode(gpioNumber, pigpio.INPUT)
 

@@ -11,7 +11,7 @@ class PWM(Gpio):
         self.dutyCycle = 0
         self.frequency = 100
         #initialise pin as hardware pwm
-        self.engine.pi.hardware_PWM(self.getGpio(), self.getFrequency(), self.getDutyCycle())
+        self.engine.pi.hardware_PWM(self.getGpio(), self.getFrequency(), 1000000)
 
 
     def setDutyCycle(self, dutyCycle):

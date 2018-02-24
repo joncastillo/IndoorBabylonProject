@@ -11,10 +11,12 @@ class Switch(Gpio):
 
     def __init__(self, pinNumber, gpioNumber, label, engine):
         super().__init__(pinNumber,gpioNumber, label, engine)
-        self.state = Switch.e_state.Off
 
         #initialise pin as output
         self.engine.pi.set_mode(gpioNumber, pigpio.OUTPUT)
+
+        currentState = self.engine.pi.read(gpioNumber)
+        self.state = Switch.e_state.Off if currentState == 0 else Switch.e_state.On
 
     def setState(self, state):
         if state != self.state:
