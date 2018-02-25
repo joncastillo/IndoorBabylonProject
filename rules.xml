@@ -1,11 +1,14 @@
 <RULES>
     <ONCHANGERULES>
-        <OnChange gpio="" condition="" rulefile="lighting"/>
-        <OnChange gpio="" toValue="" condition="" rulefile="ledlighting"/>
+        <OnChange gpio="10" toValue="On" condition="" rulefile="lighting.py"/>
+        <OnChange gpio="11" toValue="On" condition="" rulefile="ledlighting.py"/>
     </ONCHANGERULES>
 
     <CRONRULES>
-        <CronRule cron="0 0 10 30" condition="" rulefile="water"/>
+        <CronRule cron="* * * * *" condition="" rulefile="RuleWater" description="Run this script every minute"/>
+        <CronRule cron="0/2 * * * *" condition="" rulefile="TestScheduler2" description="Run this script every two minutes"/>
+        <CronRule cron="0/2 * * * *" condition="" rulefile="TestScheduler3" description="Run this script every two minutes"/>
+        <CronRule cron="30 * * * *" condition="" rulefile="TestScheduler4" description="Run this script every hour at minute 30"/>
     </CRONRULES>
 
 </RULES>

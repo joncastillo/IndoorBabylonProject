@@ -11,7 +11,7 @@ def rebuildDb():
     db.execute("""DROP TABLE IF EXISTS Alias""")
     db.execute("""DROP TABLE IF EXISTS GpioSorted""")
     db.execute("""DROP TABLE IF EXISTS Rules""")
-
+    db.execute("""DROP TABLE IF EXISTS CronJobs""")
     db.execute("""
       CREATE TABLE IF NOT EXISTS Gpio (
         ID INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -46,9 +46,7 @@ def rebuildDb():
 
     for item in tree.iterfind("GPIO"):
         for item2 in item:
-            print (item2.tag, end='')
             attribute = (item2.attrib)
-            print (attribute)
             db.execute(""" 
                 INSERT OR REPLACE  INTO Gpio ( Pin, Type, name )
                 VALUES ( ?, ?, ?  )
@@ -56,9 +54,7 @@ def rebuildDb():
 
     for item in tree.iterfind("PWM"):
         for item2 in item:
-            print (item2.tag,end ='')
             attribute = (item2.attrib)
-            print (item2.attrib)
             db.execute(""" 
                 INSERT OR REPLACE  INTO Gpio ( Pin, Type, name )
                 VALUES ( ?, ?, ?  )
@@ -66,9 +62,7 @@ def rebuildDb():
 
     for item in tree.iterfind("I2C"):
         for item2 in item:
-            print (item2.tag,end='')
             attribute = (item2.attrib)
-            print (item2.attrib)
             db.execute(""" 
                 INSERT OR REPLACE  INTO Gpio ( Pin, Type, name )
                 VALUES ( ?, ?, ?  )
@@ -76,14 +70,11 @@ def rebuildDb():
 
     for item in tree.iterfind("SPI"):
         for item2 in item:
-            print (item2.tag,end='')
             attribute = (item2.attrib)
-            print (item2.attrib)
             db.execute(""" 
                 INSERT OR REPLACE  INTO Gpio ( Pin, Type, name )
                 VALUES ( ?, ?, ?  )
             """,(int(attribute["pin"]), "SPI", attribute["name"]))
-
 
     db.execute("""
       CREATE TABLE IF NOT EXISTS GpioSorted (
@@ -100,9 +91,7 @@ def rebuildDb():
 
     for item in tree.iterfind("ALIAS"):
         for item2 in item:
-            print (item2.tag,end='')
             attribute = (item2.attrib)
-            print (item2.attrib)
             name = item2.attrib["name"]
 
 
@@ -111,7 +100,7 @@ def rebuildDb():
                 if alias == "NOT_ASSIGNED":
                     continue
                 gpioId = db.execute(""" 
-                  SELECT ID FROM Gpio WHERE name='"""+name+"""'""")
+                  SELECT Pin FROM Gpio WHERE name='"""+name+"""'""")
                 gpoIdNum = gpioId.fetchone()[0]
 
                 db.execute("""
@@ -119,17 +108,48 @@ def rebuildDb():
                     VALUES ( ?, ? )
                 """, (alias, gpoIdNum))
 
-    db.commit()
-    table = db.execute(""" SELECT * FROM Gpio """)
-    print (table.fetchall())
-    table = db.execute(""" SELECT * FROM Alias """)
-    print (table.fetchall())
+
 
     tree = etree.parse("./rules.xml")
     for item in tree.iterfind("ONCHANGERULES"):
         for item2 in item:
-            print(item2)
+            gpio = item2.attrib["gpio"]
+            #condition = item2.attrib["condition"]
+            toValue = item2.attrib["toValue"]
+            rulefile = item2.attrib["rulefile"]
+            db.execute("""
+                INSERT OR REPLACE  INTO Rules ( GpioID, newValue, TriggeredScript )
+                VALUES ( ?, ?, ? )
+            """, (gpio, toValue, rulefile))
 
     for item in tree.iterfind("CRONRULES"):
         for item2 in item:
-            print(item2)
+            cron = item2.attrib["cron"]
+            #condition = item2.attrib["condition"]
+            rulefile = item2.attrib["rulefile"]
+            db.execute("""
+                INSERT OR REPLACE  INTO CronJobs ( cronStatement, triggeredScript )
+                VALUES ( ?, ? )
+            """, (cron, rulefile))
+
+    db.commit()
+    table = db.execute(""" SELECT * FROM Gpio """)
+    print("---------------")
+    print ("GPIO table:")
+    print("---------------")
+    print (table.fetchall())
+    table = db.execute(""" SELECT * FROM Alias """)
+    print("---------------")
+    print ("Alias table:")
+    print("---------------")
+    print (table.fetchall())
+    table = db.execute(""" SELECT * FROM Rules """)
+    print("---------------")
+    print ("Rules table:")
+    print("---------------")
+    print (table.fetchall())
+    table = db.execute(""" SELECT * FROM CronJobs """)
+    print("---------------")
+    print ("Jobs table:")
+    print("---------------")
+    print (table.fetchall())

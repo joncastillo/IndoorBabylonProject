@@ -36,5 +36,8 @@ class PWM(Gpio):
     def getFrequency(self):
         return self.frequency
 
+    def setValue(self, value):
+        self.setDutyCycle(value)
+
     def __repr__(self):
         return "GPIO"+str(self.gpioNumber)+"[PWM]:"+str(self.dutyCycle)+"%"

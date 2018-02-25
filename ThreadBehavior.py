@@ -24,9 +24,8 @@ class ContactThreadBehaviorPersistent(GPIOThreadBehavior):
         self.persistenceRate = persistenceRate
 
     def run(self):
-        pi = pigpio.pi()
         while self.quit == False:
-            new_status = pi.read(self.gpioNumber)
+            new_status = self.engine.pi.read(self.gpioNumber)
             if new_status != self.old_status:
                 print("Contact[" + str(self.gpioNumber) + "] changed to: " + str(new_status))
                 self.old_status = new_status
@@ -37,4 +36,3 @@ class ContactThreadBehaviorPersistent(GPIOThreadBehavior):
 
     def stop(self):
         self.quit = True
-

@@ -35,5 +35,13 @@ class Switch(Gpio):
     def getState(self):
         return self.state
 
+    def setValue(self, value):
+        if value == 1:
+            self.setState(Switch.e_state.On)
+        elif value == 0:
+            self.setState(Switch.e_state.Off)
+        else:
+            self.setState(value)
+
     def __repr__(self):
         return "GPIO"+str(self.gpioNumber)+"[SW]:"+str(self.state)

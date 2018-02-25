@@ -32,5 +32,8 @@ class Contact(Gpio):
     def getState(self):
         return self.state
 
+    def setValue(self, value):
+        print("Error: There was an attempt to set contact#" + str(gpioNumber))
+
     def __repr__(self):
         return "GPIO"+str(self.gpioNumber)+"[CON]:"+str(self.state)

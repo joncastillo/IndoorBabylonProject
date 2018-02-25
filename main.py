@@ -14,6 +14,7 @@ app.config['SECRET_KEY'] = 'ver.bai.tas.unt.int.ell.ige.nda.utr.esm.agi.sva.lea.
 bootstrap = Bootstrap(app)
 moment = Moment(app)
 
+rebuildDb()
 engine = Engine()
 
 from Switch import Switch
@@ -73,7 +74,6 @@ def index():
 
 def main():
     system("sudo pigpiod")
-    rebuildDb()
     engine.start()
     #engine.join()
 

@@ -15,3 +15,7 @@ class Gpio(Pin):
 
     def getGpio(self):
         return self.gpioNumber
+
+    #abstractmethod
+    def setValue(self, value):
+        pass
