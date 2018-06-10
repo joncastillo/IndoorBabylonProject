@@ -1,18 +1,257 @@
-{% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
+<!doctype html>
+<html class="no-js" lang="">
 
-{% block title %}Farm@Home{% endblock %}
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-{% block page_content %}
-<div class="page-header">
-    <a href = "/off"> Turn off GPIO 6 </a><br/>
-    <a href = "/on"> Turn on GPIO 6 </a><br/>
-    <a href = "/setgpio?gpioNum=16&value=Off"> Turn off GPIO 16 </a><br/>
-    <a href = "/setgpio?gpioNum=16&value=On"> Turn on GPIO 16 </a><br/>
-    <a href = "/setpwm?gpioNum=12&value=3"> Set PWM 12 to 3% Duty Cycle </a><br/>
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="apple-touch-icon" href="icon.png">
+  <!-- Place favicon.ico in the root directory -->
 
-</div>
-<!--
-    {{ wtf.quick_form(form) }}
--->
-{% endblock %}
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+  <!--[if lte IE 9]>
+    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+  <![endif]-->
+
+  <!-- Add your site or application content here -->
+  <table style="height:100%; width:100%;" cellpadding="0" cellspacing="0" bgcolor="#e6e6fa">
+    <tr style="text-align: center;" border="1">
+      <td style="border-style: solid;">
+        <div style="font-size: 22px;font-family: 'Andale Mono' ;">GROW LIGHT</div>
+        <table style="width:100%">
+          <tr>
+            <td>
+              <form action="/setgpio">
+                <input type="hidden" name="gpioNum" value="5"/>
+                <input type="hidden" name="value" value="Off"/>
+                <input type="submit" style="font-size: 18px; width: 100%; border-color: dodgerblue;" value="Grow Light 1 Off"/>
+              </form>
+            </td>
+            <td>
+              <form action="/setgpio">
+                <input type="hidden" name="gpioNum" value="5"/>
+                <input type="hidden" name="value" value="On"/>
+                <input type="submit" style="font-size: 18px; width: 100%; border-color: dodgerblue;" value="Grow Light 1 On"/>
+              </form>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <form action="/setgpio">
+                <form action="/setgpio">
+                  <input type="hidden" name="gpioNum" value="6"/>
+                  <input type="hidden" name="value" value="Off"/>
+                  <input type="submit" style="font-size: 18px; width: 100%; border-color: dodgerblue;" value="Grow Light 2 Off"/>
+                </form>
+            </td>
+            <td>
+              <form action="/setgpio">
+                <input type="hidden"  name="gpioNum" value="6"/>
+                <input type="hidden" name="value" value="On"/>
+                <input type="submit" style="font-size: 18px; width: 100%; border-color: dodgerblue;" value="Grow Light 2 On"/>
+              </form>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <form action="/setgpio">
+                <input type="hidden" name="gpioNum" value="14"/>
+                <input type="hidden" name="value" value="Off"/>
+                <input type="submit" style="font-size: 18px; width: 100%; border-color: dodgerblue;" value="Grow Light 3 Off"/>
+              </form>
+            </td>
+            <td>
+              <form action="/setgpio">
+                <input type="hidden" name="gpioNum" value="14"/>
+                <input type="hidden" name="value" value="On"/>
+                <input type="submit" style="font-size: 18px; width: 100%; border-color: dodgerblue;" value="Grow Light 3 On"/>
+              </form>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+  </table>
+
+  <p></p>
+
+  <table style="height:100%; width:100%" cellpadding="0" cellspacing="0" bgcolor="#e6e6fa">
+    <tr style="text-align: center;" border="1">
+      <td style="border-style: solid;">
+        <div style="font-size: 22px;font-family: 'Andale Mono' ;">MIST CONTROL</div>
+        <table style="width:100%">
+          <tr>
+            <td>
+              <form action="/setgpio">
+                <input type="hidden" name="gpioNum" value="4"/>
+                <input type="hidden" name="value" value="Off"/>
+                <input type="submit" style="font-size: 18px; width: 100%; border-color: dodgerblue;" value="Pump Off"/>
+              </form>
+            </td>
+            <td>
+              <form action="/setgpio">
+                <input type="hidden" name="gpioNum" value="4"/>
+                <input type="hidden" name="value" value="On"/>
+                <input type="submit" style="font-size: 18px; width: 100%; border-color: dodgerblue;" value="Pump On"/>
+              </form>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <form action="/setgpio">
+                <input type="hidden" name="gpioNum" value="21"/>
+                <input type="hidden" name="value" value="Off"/>
+                <input type="submit" style="font-size: 18px; width: 100%; border-color: dodgerblue;" value="Mist 1 Off"/>
+              </form>
+            </td>
+            <td>
+              <form action="/setgpio">
+                <input type="hidden" name="gpioNum" value="21"/>
+                <input type="hidden" name="value" value="On"/>
+                <input type="submit" style="font-size: 18px; width: 100%; border-color: dodgerblue;" value="Mist 1 On"/>
+              </form>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <form action="/setgpio">
+                <input type="hidden" name="gpioNum" value="22"/>
+                <input type="hidden" name="value" value="Off"/>
+                <input type="submit" style="font-size: 18px; width: 100%; border-color: dodgerblue;" value="Mist 2 Off"/>
+              </form>
+            </td>
+            <td>
+              <form action="/setgpio">
+                <input type="hidden" name="gpioNum" value="22"/>
+                <input type="hidden" name="value" value="On"/>
+                <input type="submit" style="font-size: 18px; width: 100%; border-color: dodgerblue;" value="Mist 2 On"/>
+              </form>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <form action="/setgpio">
+                <input type="hidden" name="gpioNum" value="23"/>
+                <input type="hidden" name="value" value="Off"/>
+                <input type="submit" style="font-size: 18px; width: 100%; border-color: dodgerblue;" value="Mist 3 Off"/>
+              </form>
+            </td>
+            <td>
+              <form action="/setgpio">
+                <input type="hidden" name="gpioNum" value="23"/>
+                <input type="hidden" name="value" value="On"/>
+                <input type="submit" style="font-size: 18px; width: 100%; border-color: dodgerblue;" value="Mist 3 On"/>
+              </form>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <form action="/setgpio">
+                <input type="hidden" name="gpioNum" value="24"/>
+                <input type="hidden" name="value" value="Off"/>
+                <input type="submit" style="font-size: 18px; width: 100%; border-color: dodgerblue;" value="Mist 4 Off"/>
+              </form>
+            </td>
+            <td>
+              <form action="/setgpio">
+                <input type="hidden" name="gpioNum" value="24"/>
+                <input type="hidden" name="value" value="On"/>
+                <input type="submit" style="font-size: 18px; width: 100%; border-color: dodgerblue;" value="Mist 4 On"/>
+              </form>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+  </table>
+
+  <p></p>
+
+  <table style="height:100%; width:100%" cellpadding="0" cellspacing="0" bgcolor="#e6e6fa">
+    <tr style="text-align: center;" border="1">
+      <td style="border-style: solid;">
+        <div style="font-size: 22px;font-family: 'Andale Mono' ;">VENTILATION</div>
+        <table style="width:100%">
+          <tr>
+            <td>
+              <form action="/setgpio">
+                <input type="hidden" name="gpioNum" value="17"/>
+                <input type="hidden" name="value" value="Off"/>
+                <input type="submit" style="font-size: 18px; width: 100%; border-color: dodgerblue;" value="Fan Off"/>
+              </form>
+            </td>
+            <td>
+              <form action="/setgpio">
+                <input type="hidden" name="gpioNum" value="17"/>
+                <input type="hidden" name="value" value="On"/>
+                <input type="submit" style="font-size: 18px; width: 100%; border-color: dodgerblue;" value="Fan On"/>
+              </form>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  <p></p>
+
+  <table style="height:100%; width:100%" cellpadding="0" cellspacing="0" bgcolor="#e6e6fa">
+    <tr style="text-align: center;" border="1">
+      <td style="border-style: solid;">
+        <div style="font-size: 22px;font-family: 'Andale Mono' ;">AMBIENT LIGHT</div>
+        <table style="width:100%">
+          <tr>
+            <td>
+              <form action="/setgpio">
+                <input type="hidden" name="gpioNum" value="16"/>
+                <input type="hidden" name="value" value="Off"/>
+                <input type="submit" style="font-size: 18px; width: 100%; border-color: dodgerblue;" value="Light Off"/>
+              </form>
+            </td>
+            <td>
+              <form action="/setgpio">
+                <input type="hidden" name="gpioNum" value="16"/>
+                <input type="hidden" name="value" value="On"/>
+                <input type="submit" style="font-size: 18px; width: 100%; border-color: dodgerblue;" value="Light On"/>
+              </form>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <form action="/setpwm?gpioNum=12" align="center">
+                <input type="range" min="0" max="100" value="0" name="value" style="width: 100%;" />
+                <input type="hidden" name="gpioNum" value="12"/>
+                <input type="submit" value="Submit">
+              </form>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  <script src="js/vendor/modernizr-{{MODERNIZR_VERSION}}.min.js"></script>
+  <script src="https://code.jquery.com/jquery-{{JQUERY_VERSION}}.min.js" integrity="{{JQUERY_SRI_HASH}}" crossorigin="anonymous"></script>
+  <script>window.jQuery || document.write('<script src="js/vendor/jquery-{{JQUERY_VERSION}}.min.js"><\/script>')</script>
+  <script src="js/plugins.js"></script>
+  <script src="js/main.js"></script>
+
+  <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+  <script>
+    window.ga = function () { ga.q.push(arguments) }; ga.q = []; ga.l = +new Date;
+    ga('create', 'UA-XXXXX-Y', 'auto'); ga('send', 'pageview')
+  </script>
+  <script src="https://www.google-analytics.com/analytics.js" async defer></script>
+</body>
+
+</html>
